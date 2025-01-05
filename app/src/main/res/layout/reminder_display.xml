@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/element"
+    android:longClickable="true"
+    android:background="@drawable/ripple_1">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/elementSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:checked="true"
+        android:theme="@style/SwitchStyle1"
+        android:paddingStart="10dp"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:orientation="vertical"
+        android:id="@+id/rightSideElements">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/topLineElements">
+
+            <TextView
+                android:id="@+id/elementNameField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="85"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-black"
+                android:maxLines="1"
+                android:text="Do Some Things"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+<!--        colour storage -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="None"
+                android:id="@+id/elementColorDummy"/>
+
+            <!--        SPACER -->
+            <!--        <View-->
+            <!--            android:layout_width="0dp"-->
+            <!--            android:layout_height="match_parent"-->
+            <!--            android:layout_weight="10"/>-->
+
+            <!--        URGENCY LABEL -->
+            <!--        <TextView-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:text="Urgency: "-->
+            <!--            android:textColor="@color/yellow_2"-->
+            <!--            android:fontFamily="sans-serif-medium"-->
+            <!--            android:layout_weight="5"-->
+            <!--            android:id="@+id/elementUrgencyLabel"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:layout_weight="5"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:id="@+id/elementUrgencyField" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/middleLineElements">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/elementTypeField"
+                android:text="Quote"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-black" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/bottomLineElements">
+
+<!--            INVISIBLE SPACER -->
+<!--            <androidx.appcompat.widget.SwitchCompat-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="10dp"-->
+<!--                android:visibility="invisible"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doing some things will help you calm down and find your bearings"
+                android:textSize="13sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:id="@+id/elementDescriptionField"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

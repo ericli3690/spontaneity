@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onboardingFragment">
+
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.spontaneity.OnboardingFragment"
+        tools:layout="@layout/onboarding">
+        <action
+            android:id="@+id/action_listScreen_self"
+            app:destination="@id/onboardingFragment" />
+        <action
+            android:id="@+id/action_onboardingFragment_to_reminderDisplayFragment"
+            app:destination="@id/reminderDisplayFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/reminderDisplayFragment"
+        android:name="com.example.spontaneity.ReminderDisplayFragment"
+        android:label="reminder_display_list"
+        tools:layout="@layout/reminder_display_list" />
+</navigation>

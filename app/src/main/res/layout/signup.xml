@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/signupVersion"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SIGNUP"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:id="@+id/signupScreenTitle"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameWrapperSignup"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameTitleSignup"
+            android:text="Username:"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameFieldSignup"
+            android:inputType="textPersonName"
+            android:hint="empty"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:autofillHints="New Reminder" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/realNameWrapperSignup"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/realNameTitleSignup"
+            android:text="First and Last Name:"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/realNameFieldSignup"
+            android:inputType="textPersonName"
+            android:hint="empty"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:autofillHints="New Reminder" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordWrapperSignup"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordTitleSignup"
+            android:text="Password:"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordFieldSignup"
+            android:inputType="textPassword"
+            android:hint="empty"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:autofillHints="New Reminder" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/frequencyWrapperSignup"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/frequencyTitleSignup"
+            android:text="Seconds Between Notifications:"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frequencyFieldSignup"
+            android:inputType="number"
+            android:hint="empty"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:autofillHints="New Reminder" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <Button
+        android:id="@+id/signup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/yellow_1"
+        android:text="Sign Up"
+        android:textColor="@color/black" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

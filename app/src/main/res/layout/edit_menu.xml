@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EDIT/CREATE REMINDER"
+                android:fontFamily="sans-serif-black"
+                android:textSize="25sp"
+                android:id="@+id/editBanner" />
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameWrapper"
+                android:layout_below="@id/editBanner"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nameTitle"
+                    android:text="Name:"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nameField"
+                    android:inputType="textPersonName"
+                    android:hint="empty"
+                    android:layout_marginStart="10dp"
+                    android:textSize="20sp"
+                    android:autofillHints="New Reminder" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeWrapper"
+                android:layout_below="@id/nameWrapper"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/typeTitle"
+                    android:text="Type:"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/typeField"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Type" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorWrapper"
+                android:layout_below="@id/typeWrapper"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/colorTitle"
+                    android:text="Color:"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/colorField"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Colors" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/urgencyWrapper"
+                android:layout_below="@id/colorWrapper"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/urgencyTitle"
+                    android:text="Urgency:"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/urgencyField"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Urgencies" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/descriptionWrapper"
+                android:layout_below="@+id/urgencyWrapper"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/descriptionTitle"
+                    android:text="Description:"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"
+                    android:layout_below="@+id/typeTitle"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/descriptionField"
+                    android:inputType="textMultiLine"
+                    android:hint="empty"
+                    android:textSize="20sp"
+                    android:autofillHints="" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:text="Delete"
+                android:layout_below="@id/descriptionWrapper"
+                android:layout_marginTop="10dp"
+                android:id="@+id/deleteButton"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/teal_700"
+                android:text="Done"
+                android:layout_below="@id/descriptionWrapper"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/doneButton"/>
+
+
+
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+    
+</RelativeLayout>
