@@ -36,22 +36,20 @@ import java.util.Comparator;
 import java.util.List;
 
 // ADAPTER
-// crucial class that governs how both the collection of reminders as a whole works
+// governs how both the collection of reminders as a whole works
 // and also how individual reminders work
 
 public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<ReminderDisplayRecyclerViewAdapter.ViewHolder> {
 
     // public list of reminders
     // each element is a reminder
-    // if these are edited anywhere in the code and adapter.notifyx is called, the screen will update
+    // if these are edited anywhere in the code and adapter.notify is called, the screen will update
     public final List<Reminder> reminders;
 
-    // get enclosings
     private final Context enclosingContext;
     private final Activity enclosingActivity;
     public ViewGroup enclosingViewGroup;
 
-    // const
     public ReminderDisplayRecyclerViewAdapter(List<Reminder> reminders, Context context, Activity activity) {
         // sort reminders alphabetically
         Collections.sort(reminders, Comparator.comparing(Reminder::getName));
@@ -60,15 +58,10 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         this.enclosingActivity = activity;
     }
 
-    // delete this
-    private void deleteThis(Reminder reminder) { // user has confirmed a delete
-        // is used twice: onlongpress, and at edit.deletebutton
-        // update view
+    private void deleteThis(Reminder reminder) {
         notifyItemRemoved(reminders.indexOf(reminder));
         notifyItemRangeChanged(reminders.indexOf(reminder), reminders.size());
-        // remove the reminder
         reminders.remove(reminder);
-        // save this change
         reloadFile();
     }
 
@@ -78,7 +71,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     public void reloadList() {
         // sort alphabetically
         Collections.sort(reminders, Comparator.comparing(Reminder::getName));
-        // notify the ui
         notifyDataSetChanged();
     }
 
@@ -87,34 +79,27 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         // write to file
         // could do this in a really complex way by finding the exact line and changing it
         // but completely overwriting the file, while more inefficient, is faster
+        // TODO in the future, revamp the file saving system so that more surgical writes are possible
         FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
-        fileManager.deleteFile(); // delete and recreate
-        fileManager.createFile(Reminder.getRemindersString(reminders)); // use Reminders format method
+        fileManager.deleteFile();
+        fileManager.createFile(Reminder.getRemindersString(reminders));
     }
 
     // MENU ACTIONS
 
-    // delete every single reminder
     public void deleteAll() {
-        // delete all reminders in file
         FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
         fileManager.deleteFile();
         fileManager.createFile(new String[] {""}); // file must always exist, but add empty marker
-        // delete everything in reminders
         int remindersSize = reminders.size();
         reminders.clear();
-        // notify the ui
         notifyItemRangeChanged(0, remindersSize);
     }
 
-    // add default reminders
     public void addDefaults() {
-        // append reminders to file
         FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
         fileManager.appendFile(Reminder.getRemindersString(Reminder.defaultReminders));
-        // add to the data
         reminders.addAll(Reminder.defaultReminders);
-        // notify ui
         reloadList();
     }
 
@@ -122,10 +107,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // save the viewgroup for use
         enclosingViewGroup = parent;
-        // get the binding by inflating it with the xml provided by the parent element it will be attached to
-        // also pass in the parent and not to attach it to the app root
         ReminderDisplayBinding binding = ReminderDisplayBinding.inflate(
                 LayoutInflater.from(parent.getContext()),
                 parent,
@@ -138,9 +120,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         binding.element.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // get the clicked reminder
                 Reminder reminder = reminders.get(viewHolder.getBindingAdapterPosition());
-                // make a new menu using EditAddMenu, with title, deps, and the reminder to populate it with
                 EditAddMenu editMenu = new EditAddMenu(
                         "EDIT REMINDER",
                         enclosingContext,
@@ -151,7 +131,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
                 editMenu.binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // delete the reminder and dismiss the edit prompt
                         deleteThis(reminder);
                         editMenu.dialog.dismiss();
                     }
@@ -160,9 +139,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
                 editMenu.binding.doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // set the reminder's display data
                         editMenu.lockAnswers();
-                        // apply changes, then dismiss the edit prompt
                         reloadList();
                         reloadFile();
                         editMenu.dialog.dismiss();
@@ -177,16 +154,13 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         binding.element.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                // get the clicked reminder
                 Reminder reminder = reminders.get(viewHolder.getBindingAdapterPosition());
-                // get confirmation for delete
                 Snackbar deleteConfirmation = Snackbar.make(
                         view,
                         "Delete?",
                         BaseTransientBottomBar.LENGTH_LONG
                 );
                 deleteConfirmation.setAction("Yes", new View.OnClickListener() {
-                    // confirmation recieved
                     @Override
                     public void onClick(View view) {
                         deleteThis(reminder);
@@ -201,9 +175,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         binding.elementSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                // get the clicked reminder
                 Reminder reminder = reminders.get(viewHolder.getBindingAdapterPosition());
-                // isChecked is whether it is checked or not
                 reminder.setChecked(isChecked);
                 reloadFile();
             }
@@ -218,31 +190,28 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // when a viewholder is binded to the view, set its characteristics using the data set
         // this is where the dataset is cast to the binding
-        holder.nameView.setText(reminders.get(position).getName()); // set name
-        holder.descriptionView.setText(reminders.get(position).getDescription()); // set description
-
-        // urgency
-        int urgency = reminders.get(position).getUrgency(); // get urgency
-        holder.urgencyView.setText(String.valueOf(urgency)); // set urgency text
-        // set urgency color
-        holder.urgencyView.setTextColor( // set urgency color
+        holder.nameView.setText(reminders.get(position).getName());
+        holder.descriptionView.setText(reminders.get(position).getDescription());
+        int urgency = reminders.get(position).getUrgency();
+        holder.urgencyView.setText(String.valueOf(urgency));
+        holder.urgencyView.setTextColor(
             ContextCompat.getColor( // need to use a color id, then need to pass in context
-                enclosingContext, // pass in context
+                enclosingContext,
                 getUrgencyColor(urgency) // get color id using method below
             )
         );
 
         // color
-        String color = reminders.get(position).getColor(); // get color
-        holder.nameView.setTextColor( // set name's color using the color field, as above
+        String color = reminders.get(position).getColor();
+        holder.nameView.setTextColor(
             ContextCompat.getColor(
                 enclosingContext,
                 getTextColor(color)
             )
         );
 
-        holder.typeView.setText(reminders.get(position).getType()); // set type
-        holder.switchView.setChecked(reminders.get(position).getChecked()); // set checked
+        holder.typeView.setText(reminders.get(position).getType());
+        holder.switchView.setChecked(reminders.get(position).getChecked());
     }
 
     // mandatory get size
@@ -260,7 +229,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         public final SwitchCompat switchView;
 
         public ViewHolder(ReminderDisplayBinding binding) {
-            // get the binding's stuff
             super(binding.getRoot());
             this.nameView = binding.elementNameField;
             this.descriptionView = binding.elementDescriptionField;
@@ -272,7 +240,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
 
     // switch for urgency color
     public int getUrgencyColor(int urgency) {
-        // switch, conditionals
         switch (urgency) {
             case 5:
                 return R.color.red;

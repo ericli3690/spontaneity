@@ -59,28 +59,21 @@ public class NotificationWorker extends Worker {
 //        return frequencyInSeconds + randomPadding;
 //    }
 
-    // so that each notif has a unique id
     private int getNextId() {
         // use an internal file holding an int
-        // add one to the int and rewrite it to the file, also return it
         FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "id.txt");
         int id;
         if (fileManager.wasCreated()) {
-            // the file already exists
-            // read its single value, then delete it
-            // add one to the value
             String[] readFile = fileManager.readFile();
             id = Integer.parseInt(readFile[readFile.length - 1]);
             id++;
             fileManager.deleteFile();
         } else {
-            // the file has not been created yet
-            // the first value is 1
             id = 1;
         }
         // make a new file with the id as the single value
         fileManager.createFile(new String[] {String.valueOf(id)});
-        return id; // return the id
+        return id;
     }
 
     @NonNull
@@ -115,9 +108,8 @@ public class NotificationWorker extends Worker {
                     }
                 }
             }
-            // pick a winner index
+
             int lotteryWinnerIndex = random.nextInt(reminderLottery.size());
-            // get the winner
             Reminder lotteryWinner = reminderLottery.get(lotteryWinnerIndex);
             queuedNames.add(lotteryWinner.getName());
             queuedDescriptions.add(lotteryWinner.getType() + ": " + lotteryWinner.getDescription());

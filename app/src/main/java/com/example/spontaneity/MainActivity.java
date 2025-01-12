@@ -34,7 +34,6 @@ import com.example.spontaneity.databinding.SignupBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    // its physical presence
     private ActivityMainBinding binding;
 
     @Override
@@ -123,13 +122,13 @@ public class MainActivity extends AppCompatActivity {
                             dialogBinding.realNameFieldSignup.getText().toString(),
                             dialogBinding.frequencyFieldSignup.getText().toString()
                     });
-                    dialog.dismiss(); // dismiss the dialog
+                    dialog.dismiss();
                 }
             });
             // set the binding as the dialog's contents, make it cancelable
             dialog.setContentView(dialogBinding.getRoot());
             dialog.setCancelable(true);
-            dialog.show(); // show
+            dialog.show();
             return true; // handled
         } else {
             // not handled by this function, pass it up the callstack

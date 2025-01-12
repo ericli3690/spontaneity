@@ -18,11 +18,9 @@ import java.util.Arrays;
 
 public class EditAddMenu {
 
-    // local storage of key objects
     public Dialog dialog;
     public EditMenuBinding binding;
 
-    // the populated data
     private Reminder reminder;
 
     // spinner presets
@@ -52,7 +50,6 @@ public class EditAddMenu {
 
     // factory method for quickly making spinners
     private void makeSpinnerAdapter(Context context, Spinner spinner, String[] values, String defaultValue) {
-        // make a new adapter using the context, the base display layout, and the values
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 context,
                 android.R.layout.simple_spinner_item,
@@ -60,11 +57,10 @@ public class EditAddMenu {
         );
         // set the dropdown visual to the default
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter); // attach
+        spinner.setAdapter(adapter);
         spinner.setSelection(Arrays.asList(values).indexOf(defaultValue)); // set the selected one using index
     }
 
-    // const
     public EditAddMenu(String title, Context context, ViewGroup parent, Reminder reminderTemplate) {
         // open dialog
         this.dialog = new Dialog(context, R.style.DialogBoxStyle);
@@ -72,16 +68,14 @@ public class EditAddMenu {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
         // inflate the menu's xml, set it as the dialog's root
         this.binding = EditMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        // get reminder
+
         this.reminder = reminderTemplate;
         // set menu values
         binding.editBanner.setText(title);
-        // name and description
         binding.nameField.setText(reminder.getName());
         binding.descriptionField.setText(reminder.getDescription());
-        // spinners
         makeSpinnerAdapter(
-                context, // contet
+                context,
                 binding.typeField, // spinner
                 typeSpinnerOptions, // options
                 reminder.getType() // default
@@ -98,7 +92,6 @@ public class EditAddMenu {
                 urgencySpinnerOptions,
                 String.valueOf(reminder.getUrgency())
         );
-        // pass the binding to the dialog, then show the dialog
         dialog.setContentView(binding.getRoot());
         dialog.setCancelable(true);
         dialog.show();

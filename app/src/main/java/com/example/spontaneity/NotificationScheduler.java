@@ -34,7 +34,6 @@ import java.util.concurrent.TimeUnit;
 
 public class NotificationScheduler {
 
-    // get enclosing
     private final Context enclosingContext;
     private final Activity enclosingActivity;
 
@@ -44,7 +43,6 @@ public class NotificationScheduler {
 
     private final String CHANNEL_ID = "10001"; // arbitrary channel id
 
-    // const
     public NotificationScheduler(Context enclosingContext, Activity enclosingActivity) {
         this.enclosingContext = enclosingContext;
         this.enclosingActivity = enclosingActivity;
@@ -57,24 +55,18 @@ public class NotificationScheduler {
         FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "id.txt");
         int id;
         if (fileManager.wasCreated()) {
-            // the file already exists
-            // read its single value, then delete it
-            // add one to the value
             String[] readFile = fileManager.readFile();
             id = Integer.parseInt(readFile[readFile.length - 1]);
             id++;
             fileManager.deleteFile();
         } else {
-            // the file has not been created yet
-            // the first value is 1
             id = 1;
         }
         // make a new file with the id as the single value
         fileManager.createFile(new String[] {String.valueOf(id)});
-        return id; // return the id
+        return id;
     }
 
-    // actually trigger a notif
     public void sendNotif(String title, String description) {
         // make a new notification channel to send to
         NotificationChannel notificationChannel = new NotificationChannel(
@@ -106,13 +98,12 @@ public class NotificationScheduler {
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000})
                 .setPriority(NotificationCompat.PRIORITY_MAX);
-        // show notification with new id
+
         int nextId = getNextId();
         Log.d("notif id", String.valueOf(nextId)); // debug
         notificationManager.notify(nextId, builder.build()); // send
     }
 
-    // schedule a notification to fire
     public void scheduleNotif(int timeout, int randomness, List<Reminder> reminders) {
         int delay = random.nextInt(randomness) + timeout; // in the range of time randomness, plus minimum timeout
         executorService.schedule(new Runnable() {
@@ -129,11 +120,9 @@ public class NotificationScheduler {
     private void chooseNotif(int timeout, int randomness, List<Reminder> reminders) {
         scheduleNotif(timeout, randomness, reminders);
         if (reminders.size() == 0) {
-            // there are no reminders! remind to add some new ones
             sendNotif("No reminders!", "Add some reminders!");
             return;
         }
-        // else
         // make a lottery of reminders to choose from
         // the urgency of a reminder is how many tickets it gets into the lottery, and is thus related to its likelihood
         List<Reminder> reminderLottery = new ArrayList<Reminder>();
@@ -152,11 +141,9 @@ public class NotificationScheduler {
                 }
             }
         }
-        // pick a winner index
+
         int lotteryWinnerIndex = random.nextInt(reminderLottery.size());
-        // get the winner
         Reminder lotteryWinner = reminderLottery.get(lotteryWinnerIndex);
-        // send the winner
         sendNotif(lotteryWinner.getName(),
                 lotteryWinner.getType() + ": " + lotteryWinner.getDescription());
     }

@@ -56,7 +56,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ReminderDisplayFragment extends Fragment {
 
-    // physical presence
     public ReminderDisplayListBinding binding;
     public ReminderDisplayRecyclerViewAdapter adapter;
 
@@ -94,23 +93,18 @@ public class ReminderDisplayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // get binding and binding.list
+
         binding = ReminderDisplayListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         RecyclerView list = binding.list;
         list.setLayoutManager(new NPALinearLayoutManager(root.getContext())); // use NPA
-
-        // initialize notifscheduler
         notifScheduler = new NotificationScheduler(getContext(), getActivity());
 
         // get the list of items to display
         // either from defaults, or using internal storage
         List<Reminder> listElements = new ArrayList<Reminder>();
-        // create filemanager object to handle exceptions and jargon
         FileManager remindersFile = new FileManager(root.getContext(), getActivity(), "reminders.txt");
         if (remindersFile.wasCreated()) {
-            // file already exists
-            // read it, split along the delimiter, and use the values to create Reminder objects
             String[] readFile = remindersFile.readFile();
             for (String line : readFile) {
                 if (!line.equals("")) {
@@ -128,24 +122,20 @@ public class ReminderDisplayFragment extends Fragment {
             }
         } else {
             // file has not been created yet, just use the defaults
-            // the file SHOULD alwaysAexist, but just in case...
-            listElements = Reminder.defaultReminders; // display
-            remindersFile.createFile(Reminder.getRemindersString(Reminder.defaultReminders)); // save to file
+            // the file SHOULD always always exist, but just in case...
+            listElements = Reminder.defaultReminders;
+            remindersFile.createFile(Reminder.getRemindersString(Reminder.defaultReminders));
         }
-        // give the adapter the obtained list elements
-        // then lock in the adapter and return the root
+
         adapter = new ReminderDisplayRecyclerViewAdapter(listElements, getContext(), getActivity());
         list.setAdapter(adapter);
-        // return the binding root
         return root;
     }
 
     private void scheduleMotivationalMessage() {
         // schedule toast action
-        // get settings file
         FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
         String[] readFile = fileManager.readFile();
-        // get frequency
         int frequencyInSeconds = Integer.parseInt(readFile[3]);
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -165,16 +155,13 @@ public class ReminderDisplayFragment extends Fragment {
                     }
                 });
             }
-        }, frequencyInSeconds, frequencyInSeconds, TimeUnit.SECONDS); // runs every a secs after an initial b sec delay // xTODO save as settings
+        }, frequencyInSeconds, frequencyInSeconds, TimeUnit.SECONDS); // runs every a secs after an initial b sec delay // TODO save as settings
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // the screen has been created, attach some visuals stuff
         super.onViewCreated(view, savedInstanceState);
-        // change app bar title by getting the activity's bar and using a setter
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Spontaneity: Reminders");
-        // reactivate menu buttons after they were disabled in onboarding
         // unimplemented: make this more efficient
         MenuHost menuHost = getActivity();
         menuHost.addMenuProvider(new MenuProvider() {
@@ -214,12 +201,9 @@ public class ReminderDisplayFragment extends Fragment {
 //                    6, // then within the next y minutes
 //                    TimeUnit.MINUTES
 //            ).build();
-            // get settings file
             FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
             String[] readFile = fileManager.readFile();
-            // get frequency
             int frequencyInSeconds = Integer.parseInt(readFile[3]);
-            // schedule at frequency
             // unimplemented: make randomness user customized rather than just a fifth of the freq
             notifScheduler.scheduleNotif(frequencyInSeconds, frequencyInSeconds/5, adapter.reminders);
         }
@@ -228,18 +212,16 @@ public class ReminderDisplayFragment extends Fragment {
         binding.checkStressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // sum up amount of actiate reminders using get checked, add up all urgencies
                 int runningTotalActivatedReminders = 0;
                 double runningTotalUrgency = 0;
-                // array manipulation using length, summing all up
                 for (int reminderNum = 0; reminderNum < adapter.reminders.size(); reminderNum++) {
-                    Reminder currentReminder = adapter.reminders.get(reminderNum); // get current rem
-                    if (currentReminder.getChecked()) { // if checked
-                        runningTotalActivatedReminders++; // increase both local vars
+                    Reminder currentReminder = adapter.reminders.get(reminderNum);
+                    if (currentReminder.getChecked()) {
+                        runningTotalActivatedReminders++;
                         runningTotalUrgency += Integer.parseInt(String.valueOf(currentReminder.getUrgency()));
                     }
                 }
-                // get average
+
                 double averageUrgency;
                 if (runningTotalActivatedReminders == 0) {
                     // prevent division by zero
@@ -250,7 +232,6 @@ public class ReminderDisplayFragment extends Fragment {
                 double roundedAverageUrgency = Globals.roundToPlaces(1, averageUrgency);
                 binding.stressOutput.setText(String.valueOf(roundedAverageUrgency));
 
-                // also add a message using ifs
                 if (roundedAverageUrgency < 2) {
                     binding.stressMessage.setText("Super zen!");
                 } else if (roundedAverageUrgency < 2.5) {
@@ -280,7 +261,6 @@ public class ReminderDisplayFragment extends Fragment {
                         "None",
                         true
                 );
-                // make a menu and put the empty reminder in for the user to edit
                 EditAddMenu addMenu = new EditAddMenu(
                         "ADD REMINDER",
                         getContext(),
@@ -291,7 +271,6 @@ public class ReminderDisplayFragment extends Fragment {
                 addMenu.binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // dismiss the dialog and do nothing else
                         addMenu.dialog.dismiss();
                     }
                 });
@@ -299,11 +278,8 @@ public class ReminderDisplayFragment extends Fragment {
                 addMenu.binding.doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // lock in the user's answers
                         addMenu.lockAnswers();
-                        // push the new reminder
                         adapter.reminders.add(reminder);
-                        // apply changes, dismiss add prompt
                         adapter.reloadList();
                         adapter.reloadFile();
                         addMenu.dialog.dismiss();

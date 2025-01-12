@@ -39,8 +39,6 @@ public class OnboardingFragment extends Fragment {
     private boolean firstTime;
 
     @Override
-    // when this fragment is displayed on the screen
-    // takes the inflater, the parent object that contains it, and any previous data if it was loaded before
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = OnboardingBinding.inflate(inflater, container, false);
@@ -50,35 +48,26 @@ public class OnboardingFragment extends Fragment {
 //        userFileManager.deleteFile();
 
         if (userFileManager.wasCreated()) {
-            // the file already exists, the user has logged in before
             firstTime = false;
-            // display the login layout, inflate it and save it to instance vars
             binding.onboardingFields.setLayoutResource(R.layout.login);
             loginBinding = LoginBinding.bind(binding.onboardingFields.inflate());
         } else {
-            // the file does not exist
             firstTime = true;
-            // display sign up layout
             binding.onboardingFields.setLayoutResource(R.layout.signup);
             signupBinding = SignupBinding.bind(binding.onboardingFields.inflate());
         }
-        // return root view
         return binding.getRoot();
     }
 
-    // once the view is rendered, set some things
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState); // in case it inherits
-        // change app bar title by getting the activity's bar and using a setter
+        super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Spontaneity");
         // hide all the menu buttons, which would break on this screen, because they act on remindersdisplayfrag
         // probably a more efficient way to do this with toolbars
         MenuHost menuHost = getActivity();
-        // edit menu
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                // get all buttons, set them all to false
                 MenuItem deleteAllButton = menu.findItem(R.id.delete_all_button);
                 MenuItem addDefaultReminders = menu.findItem(R.id.add_default_reminders);
                 MenuItem settingsButton = menu.findItem(R.id.settings_button);
@@ -101,7 +90,6 @@ public class OnboardingFragment extends Fragment {
         });
 
         if (firstTime) {
-            // signup button is present
             signupBinding.signupButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -122,7 +110,6 @@ public class OnboardingFragment extends Fragment {
             loginBinding.loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // read the user data's file
                     String[] readFile = userFileManager.readFile();
                     // compare the saved data and the user's inputs
                     if (readFile[0].equals(loginBinding.nameFieldLogin.getText().toString()) &&
@@ -130,8 +117,6 @@ public class OnboardingFragment extends Fragment {
                         // both are the same
                         // all good, do nothing
                     } else {
-                        // at least one does not match
-                        // break out and prevent reaching the navcontroller activation
                         Snackbar.make(
                                 getContext(),
                                 view,
@@ -140,7 +125,7 @@ public class OnboardingFragment extends Fragment {
                         ).show();
                         return;
                     }
-                    // navigate to next screen
+
                     NavHostFragment.findNavController(OnboardingFragment.this)
                             .navigate(R.id.action_onboardingFragment_to_reminderDisplayFragment);
                 }

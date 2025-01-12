@@ -9,7 +9,7 @@ import java.util.List;
 // editing this will change the viewholder binding in adapter if notifyxchanged() is called on adapter
 
 public class Reminder {
-    // instance vars
+
     private String name;
     private String description;
     private int urgency;
@@ -17,7 +17,6 @@ public class Reminder {
     private String color;
     private boolean checked;
 
-    // const
     public Reminder(String name, String description, int urgency, String type, String color, boolean checked) {
         this.name = name;
         this.description = description;
@@ -153,7 +152,6 @@ public class Reminder {
     public static final List<Reminder> defaultReminders = new ArrayList<Reminder>();
 
     static {
-        // array manipulation, add in all default reminders
         for (int i = 0; i < NUM_DEFAULTS; i++) {
             defaultReminders.add(new Reminder(
                     defaultNames[i],
@@ -166,14 +164,11 @@ public class Reminder {
         }
     }
 
-    // convert a list of reminders to a string perfect for file storage
+    // convert a list of reminders to a string for file storage
     public static String[] getRemindersString(List<Reminder> list) {
-        // convert default reminders to a string that can be saved
         String[] lines = new String[list.size()];
-        // iterate through all default reminders
         for (int reminderNum = 0; reminderNum < list.size(); reminderNum++) {
             Reminder reminder = list.get(reminderNum);
-            // convert those default reminders' data to strings, save them as lines with a delimiter
             lines[reminderNum] =    reminder.getName() + "%%%" +
                                     reminder.getDescription() + "%%%" +
                                     reminder.getUrgency() + "%%%" +
