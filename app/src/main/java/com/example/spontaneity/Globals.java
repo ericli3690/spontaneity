@@ -1,13 +1,17 @@
 package com.example.spontaneity;
 
-// holds some useful global functtions
+// holds some global information that can't really be stored elsewhere
 
 public class Globals {
-    public static boolean notificationsStarted = false; // makes sure multiple notif schedulers don't run simultaneously
+
+    // upcoming notification
+    public static String nextTitle = "Click Me!";
+    public static String nextDesc = "It's time to check in on your habits.";
 
     // rounding to x decimal places, because java doesn't provide it
     public static double roundToPlaces(int places, double val) {
         double shift = Math.pow(10, places); // ex 10^2, 10^-1, how much the decimal should move
         return Math.round(shift * val) / shift; // shift decimal place, round off the rest, then remove the shift
     }
+
 }

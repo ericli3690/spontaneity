@@ -100,17 +100,31 @@
         android:id="@+id/frequencyWrapperSignup"
         android:layout_marginTop="10dp">
 
-        <TextView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/frequencyTitleSignup"
-            android:text="Seconds Between Notifications:"
-            android:fontFamily="sans-serif-black"
-            android:textSize="20sp"/>
+            android:id="@+id/frequencyTextWrapperSignup"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/frequencyTitleSignup"
+                android:text="Minutes Between Notifications:"
+                android:fontFamily="sans-serif-black"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/frequencyDescSignup"
+                android:text="Approximate and randomized.\nMust be at least 15 minutes." />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/frequencyFieldSignup"
             android:inputType="number"
             android:hint="empty"

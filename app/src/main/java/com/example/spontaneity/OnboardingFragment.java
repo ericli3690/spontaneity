@@ -1,13 +1,22 @@
 package com.example.spontaneity;
 
+import static java.lang.Math.max;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +31,8 @@ import com.example.spontaneity.databinding.SignupBinding;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.TimeUnit;
+
 // when the user first enters the app
 // will signup or login
 
@@ -32,7 +43,7 @@ public class OnboardingFragment extends Fragment {
     private LoginBinding loginBinding;
     private SignupBinding signupBinding;
 
-    // file manager to query the uesr's data
+    // file manager to query the user's data
     private FileManager userFileManager;
 
     // is this the user's first time installing the app
@@ -42,7 +53,7 @@ public class OnboardingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = OnboardingBinding.inflate(inflater, container, false);
-        userFileManager = new FileManager(getContext(), getActivity(),"user.txt");
+        userFileManager = new FileManager(getContext(), "user.txt");
 
         // DEBUG: TO DELETE USER PROFILE
 //        userFileManager.deleteFile();
@@ -51,12 +62,29 @@ public class OnboardingFragment extends Fragment {
             firstTime = false;
             binding.onboardingFields.setLayoutResource(R.layout.login);
             loginBinding = LoginBinding.bind(binding.onboardingFields.inflate());
+            startNotifications(userFileManager);
         } else {
             firstTime = true;
             binding.onboardingFields.setLayoutResource(R.layout.signup);
             signupBinding = SignupBinding.bind(binding.onboardingFields.inflate());
         }
         return binding.getRoot();
+    }
+
+    private void startNotifications(FileManager fileManager) {
+        String[] readFile = fileManager.readFile();
+        int frequencyInMinutes = max(Integer.parseInt(readFile[3]), 15); // must be at least 15 min
+
+        PeriodicWorkRequest scheduleRequest = new PeriodicWorkRequest.Builder(SchedulerWorker.class, frequencyInMinutes, TimeUnit.MINUTES)
+                .build();
+
+        WorkManager
+                .getInstance(getContext())
+                .enqueueUniquePeriodicWork(
+                        "scheduleRequest",
+                        ExistingPeriodicWorkPolicy.REPLACE,
+                        scheduleRequest
+                );
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -100,6 +128,7 @@ public class OnboardingFragment extends Fragment {
                             signupBinding.realNameFieldSignup.getText().toString(),
                             signupBinding.frequencyFieldSignup.getText().toString()
                     });
+                    startNotifications(userFileManager);
                     // and navigate to the next screen
                     NavHostFragment.findNavController(OnboardingFragment.this)
                             .navigate(R.id.action_onboardingFragment_to_reminderDisplayFragment);

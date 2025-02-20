@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 public class NotificationScheduler {
 
     private final Context enclosingContext;
-    private final Activity enclosingActivity;
 
     // for scheduling
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -45,14 +44,13 @@ public class NotificationScheduler {
 
     public NotificationScheduler(Context enclosingContext, Activity enclosingActivity) {
         this.enclosingContext = enclosingContext;
-        this.enclosingActivity = enclosingActivity;
     }
 
     // so that each notif has a unique id
     private int getNextId() {
         // use an internal file holding an int
         // add one to the int and rewrite it to the file, also return it
-        FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "id.txt");
+        FileManager fileManager = new FileManager(enclosingContext, "id.txt");
         int id;
         if (fileManager.wasCreated()) {
             String[] readFile = fileManager.readFile();

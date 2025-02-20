@@ -63,7 +63,6 @@ public class ReminderDisplayFragment extends Fragment {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     final Handler handler = new Handler();
     // for display in random toasts
-    // unimplemented feature: make these correspond with reminders
     private final String[] motivationalMessages = new String[] {
             "Have a good day today!",
             "Smile!",
@@ -75,8 +74,9 @@ public class ReminderDisplayFragment extends Fragment {
             "Be bold!"
     };
 
-    // notifications
-    NotificationScheduler notifScheduler;
+    // TODO OLD BROKEN NOTIFICATION SCHEDULER
+//    // notifications
+//    NotificationScheduler notifScheduler;
 
     // no predictive animations, stops recyclerview from crashing when a lot of items are simultaneously removed
     private static class NPALinearLayoutManager extends LinearLayoutManager {
@@ -98,71 +98,44 @@ public class ReminderDisplayFragment extends Fragment {
         View root = binding.getRoot();
         RecyclerView list = binding.list;
         list.setLayoutManager(new NPALinearLayoutManager(root.getContext())); // use NPA
-        notifScheduler = new NotificationScheduler(getContext(), getActivity());
+        // notifScheduler = new NotificationScheduler(getContext(), getActivity()); TODO OLD BROKEN NOTIFICATION SCHEDULER
 
-        // get the list of items to display
-        // either from defaults, or using internal storage
-        List<Reminder> listElements = new ArrayList<Reminder>();
-        FileManager remindersFile = new FileManager(root.getContext(), getActivity(), "reminders.txt");
-        if (remindersFile.wasCreated()) {
-            String[] readFile = remindersFile.readFile();
-            for (String line : readFile) {
-                if (!line.equals("")) {
-                    // if all lines are empty, there will be no reminders
-                    String[] splitLine = line.split("%%%");
-                    listElements.add(new Reminder(
-                            splitLine[0],
-                            splitLine[1],
-                            Integer.parseInt(splitLine[2]),
-                            splitLine[3],
-                            splitLine[4],
-                            Boolean.parseBoolean(splitLine[5])
-                    ));
-                }
-            }
-        } else {
-            // file has not been created yet, just use the defaults
-            // the file SHOULD always always exist, but just in case...
-            listElements = Reminder.defaultReminders;
-            remindersFile.createFile(Reminder.getRemindersString(Reminder.defaultReminders));
-        }
+        FileManager fileManager = new FileManager(getContext(), "reminders.txt");
 
-        adapter = new ReminderDisplayRecyclerViewAdapter(listElements, getContext(), getActivity());
+        adapter = new ReminderDisplayRecyclerViewAdapter(fileManager.readRemindersAsList(), getContext(), getActivity());
         list.setAdapter(adapter);
         return root;
     }
 
-    private void scheduleMotivationalMessage() {
-        // schedule toast action
-        FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
-        String[] readFile = fileManager.readFile();
-        int frequencyInSeconds = Integer.parseInt(readFile[3]);
-        executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() { // which is...
-                handler.post(new Runnable() { // post a new runnable to the ui thread
-                    @Override
-                    public void run() { // which is...
-                        try { // try to post a motivational toast
-                            Toast.makeText(
-                                    getContext(),
-                                    motivationalMessages[new Random().nextInt(motivationalMessages.length)],
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        } catch (NullPointerException e) { // but if it fails just do nothing
-                            Log.d("ctx thread removal", "Old Context Thread Removed");
-                        }
-                    }
-                });
-            }
-        }, frequencyInSeconds, frequencyInSeconds, TimeUnit.SECONDS); // runs every a secs after an initial b sec delay // TODO save as settings
-    }
+    // TODO ARCHIVE THIS
+//    private void scheduleMotivationalMessage() {
+//        // schedule toast action
+//        executorService.scheduleWithFixedDelay(new Runnable() {
+//            @Override
+//            public void run() { // which is...
+//                handler.post(new Runnable() { // post a new runnable to the ui thread
+//                    @Override
+//                    public void run() { // which is...
+//                        try { // try to post a motivational toast
+//                            Toast.makeText(
+//                                    getContext(),
+//                                    motivationalMessages[new Random().nextInt(motivationalMessages.length)],
+//                                    Toast.LENGTH_SHORT
+//                            ).show();
+//                        } catch (NullPointerException e) { // but if it fails just do nothing
+//                            Log.d("ctx thread removal", "Old Context Thread Removed");
+//                        }
+//                    }
+//                });
+//            }
+//        }, 60,60, TimeUnit.SECONDS); // runs every a secs after an initial b sec delay
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Spontaneity: Reminders");
-        // unimplemented: make this more efficient
+
         MenuHost menuHost = getActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
@@ -187,26 +160,28 @@ public class ReminderDisplayFragment extends Fragment {
             }
         });
 
+        // TODO DELETE THIS
         // activate random motivational messages
-        scheduleMotivationalMessage();
+//        scheduleMotivationalMessage();
 
-        // activate notifications
-        if (!Globals.notificationsStarted) {
-            Globals.notificationsStarted = true; // prevent more than one notifmanager from running
-//            Log.d("stage 1", "1");
-//            WorkRequest workRequest = new PeriodicWorkRequest.Builder(
-//                    NotificationWorker.class,
-//                    16, // x minutes minimum
-//                    TimeUnit.MINUTES,
-//                    6, // then within the next y minutes
-//                    TimeUnit.MINUTES
-//            ).build();
-            FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
-            String[] readFile = fileManager.readFile();
-            int frequencyInSeconds = Integer.parseInt(readFile[3]);
-            // unimplemented: make randomness user customized rather than just a fifth of the freq
-            notifScheduler.scheduleNotif(frequencyInSeconds, frequencyInSeconds/5, adapter.reminders);
-        }
+        // TODO OLD BROKEN NOTIFICATION CODE
+//        // activate notifications
+//        if (!Globals.notificationsStarted) {
+//            Globals.notificationsStarted = true; // prevent more than one notifmanager from running
+////            Log.d("stage 1", "1");
+////            WorkRequest workRequest = new PeriodicWorkRequest.Builder(
+////                    NotificationWorker.class,
+////                    16, // x minutes minimum
+////                    TimeUnit.MINUTES,
+////                    6, // then within the next y minutes
+////                    TimeUnit.MINUTES
+////            ).build();
+//            FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
+//            String[] readFile = fileManager.readFile();
+//            int frequencyInSeconds = Integer.parseInt(readFile[3]);
+//            // unimplemented: make randomness user customized rather than just a fifth of the freq
+//            notifScheduler.scheduleNotif(frequencyInSeconds, frequencyInSeconds/5, adapter.reminders);
+//        }
 
         // check stress button
         binding.checkStressButton.setOnClickListener(new View.OnClickListener() {

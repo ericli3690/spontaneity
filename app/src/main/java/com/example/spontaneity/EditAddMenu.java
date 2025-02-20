@@ -21,10 +21,10 @@ public class EditAddMenu {
     public Dialog dialog;
     public EditMenuBinding binding;
 
-    private Reminder reminder;
+    private final Reminder reminder;
 
     // spinner presets
-    private String[] typeSpinnerOptions = new String[] {
+    private final String[] typeSpinnerOptions = new String[] {
             "Health",
             "Positivity",
             "Quote",
@@ -33,7 +33,7 @@ public class EditAddMenu {
             "Other"
     };
 
-    private String[] colorSpinnerOptions = new String[] {
+    private final String[] colorSpinnerOptions = new String[] {
             "None",
             "Red",
             "Orange",
@@ -46,7 +46,7 @@ public class EditAddMenu {
             "Pink"
     };
 
-    private String[] urgencySpinnerOptions = new String[] {"1", "2", "3", "4", "5"};
+    private final String[] urgencySpinnerOptions = new String[] {"1", "2", "3", "4", "5"};
 
     // factory method for quickly making spinners
     private void makeSpinnerAdapter(Context context, Spinner spinner, String[] values, String defaultValue) {

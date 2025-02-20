@@ -1,3 +1,5 @@
+## General Notes on Android Studio for Reference
+
 Activity: a page, or group of pages: the big picture thing the user is doing
 Fragment: a subpage, a part of an activity
 
@@ -9,6 +11,8 @@ ViewHolder: the physical appearance of the individual elements, is basically the
 binding: included inside the ViewHolder
 Reminder: the data associated with the ViewHolders
     changing the reminder and then sending an update message to the adapter will automatically update the ViewHolder
+
+## To Do List
 
 ✅ TASK 1: REMINDERS: EDITING AND ADDING
     ✅ total life urgency, add up all urgencies, "wow your life is fast paced!"
@@ -47,36 +51,25 @@ Reminder: the data associated with the ViewHolders
     ✅ be skipped if completed
     ✅ be able to edit choices using settings menu
 
-✅ TASK 4: FINISHING
+✅ TASK 4: POLISHING
     ✅ make default bank of quotes
     ✅ comments, documentation, notes
     ✅ ensure readability
     ✅ ensure support for reorientation, etc
-    ✅ complete reflection, copypaste output
-    ✅ reread rubrics, notion board
-    ✅ practice presenting to teacher
     ✅ bug test
 
-OPTIONAL TASKS
-    set a time for a reminder to fire
-    firebase authentication using google
-    add types and colors
-    swipe left and right to see types
-    reorder reminders
-    sort reminders in different ways
-    notification onclick
-    notification vibrate and sound
-    reminder timeout after sending
-    push to app store
-    make app run in background, always send notifications
-    edit toasts, make toasts = reminders
+TASK 5: MORE POLISHING
+    fix the notification bug
+    background running
+    launch on start
+    notification vibration and sounds and color; notification onclick
+    make toasts run every minute, always
     do not disturb times / when you want to receive notifications, earliest and latest times for reminders
-    password recovery
-    multiple accounts
-    remember-me
-    delete profile
-    profile picture
-    change toasts interval
-    temporary shared builds
-    on signup new user, reset reminders to defaults
-    on settings change, automatically apply them
+    clean up settings; are preferences automatically applied when they are changed?
+    ensure dark mode works
+    put on app store
+
+TASK 6: WISHLIST
+    firebase authentication
+    better file management
+    reload file currently overwrites everything expensively, is run on every delete or edit: could get large efficiency improvements here if we switch to firebase etc

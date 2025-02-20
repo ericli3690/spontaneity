@@ -47,7 +47,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     public final List<Reminder> reminders;
 
     private final Context enclosingContext;
-    private final Activity enclosingActivity;
     public ViewGroup enclosingViewGroup;
 
     public ReminderDisplayRecyclerViewAdapter(List<Reminder> reminders, Context context, Activity activity) {
@@ -55,7 +54,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         Collections.sort(reminders, Comparator.comparing(Reminder::getName));
         this.reminders = reminders;
         this.enclosingContext = context;
-        this.enclosingActivity = activity;
     }
 
     private void deleteThis(Reminder reminder) {
@@ -79,8 +77,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         // write to file
         // could do this in a really complex way by finding the exact line and changing it
         // but completely overwriting the file, while more inefficient, is faster
-        // TODO in the future, revamp the file saving system so that more surgical writes are possible
-        FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
+        FileManager fileManager = new FileManager(enclosingContext, "reminders.txt");
         fileManager.deleteFile();
         fileManager.createFile(Reminder.getRemindersString(reminders));
     }
@@ -88,7 +85,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     // MENU ACTIONS
 
     public void deleteAll() {
-        FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
+        FileManager fileManager = new FileManager(enclosingContext, "reminders.txt");
         fileManager.deleteFile();
         fileManager.createFile(new String[] {""}); // file must always exist, but add empty marker
         int remindersSize = reminders.size();
@@ -97,7 +94,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
     }
 
     public void addDefaults() {
-        FileManager fileManager = new FileManager(enclosingContext, enclosingActivity, "reminders.txt");
+        FileManager fileManager = new FileManager(enclosingContext, "reminders.txt");
         fileManager.appendFile(Reminder.getRemindersString(Reminder.defaultReminders));
         reminders.addAll(Reminder.defaultReminders);
         reloadList();

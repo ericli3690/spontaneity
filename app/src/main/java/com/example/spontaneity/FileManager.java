@@ -2,6 +2,8 @@ package com.example.spontaneity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,20 +24,18 @@ import java.util.Scanner;
 public class FileManager {
 
     private final File file;
-    private final Activity activity; // need the activity to send snackbar errors
+    private final Context context;
 
-    public FileManager(Context context, Activity activity, String filepath) {
+    public FileManager(Context context, String filepath) {
         this.file = new File(context.getFilesDir(), filepath);
-        this.activity = activity;
+        this.context = context;
     }
 
     // if a file error occurs for some reason
     private void onError() {
-        Snackbar.make(
-                activity.findViewById(android.R.id.content),
+        Toast.makeText(context,
                 "FILE ERROR: Please try again later.",
-                BaseTransientBottomBar.LENGTH_SHORT
-        ).show();
+                Toast.LENGTH_SHORT).show();
     }
 
     public boolean wasCreated() { // check if the file exists already, ie createFile was already run for this filepath
@@ -89,6 +89,53 @@ public class FileManager {
         // strictly speaking file.delete() isnt necessary but will be included just in case
         file.delete();
         this.createFile(workingFile.toArray(new String[0])); // return as string array
+    }
+
+    public List<Reminder> readRemindersAsList() {
+        // get the list of items to display
+        // either from defaults, or using internal storage
+        List<Reminder> listElements = new ArrayList<Reminder>();
+        FileManager remindersFile = new FileManager(context, "reminders.txt");
+        if (remindersFile.wasCreated()) {
+            String[] readFile = remindersFile.readFile();
+            for (String line : readFile) {
+                if (!line.equals("")) {
+                    // if all lines are empty, there will be no reminders
+                    String[] splitLine = line.split("%%%");
+                    listElements.add(new Reminder(
+                            splitLine[0],
+                            splitLine[1],
+                            Integer.parseInt(splitLine[2]),
+                            splitLine[3],
+                            splitLine[4],
+                            Boolean.parseBoolean(splitLine[5])
+                    ));
+                }
+            }
+        } else {
+            // file has not been created yet, just use the defaults
+            // the file SHOULD always always exist, but just in case...
+            listElements = Reminder.defaultReminders;
+            remindersFile.createFile(Reminder.getRemindersString(Reminder.defaultReminders));
+        }
+        return listElements;
+    }
+
+    public int getNextId() {
+        // use an internal file holding an int
+        FileManager fileManager = new FileManager(context, "id.txt");
+        int id;
+        if (fileManager.wasCreated()) {
+            String[] readFile = fileManager.readFile();
+            id = Integer.parseInt(readFile[readFile.length - 1]);
+            id++;
+            fileManager.deleteFile();
+        } else {
+            id = 1;
+        }
+        // make a new file with the id as the single value
+        fileManager.createFile(new String[] {String.valueOf(id)});
+        return id;
     }
 
 }

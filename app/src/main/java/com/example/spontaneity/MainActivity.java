@@ -1,7 +1,14 @@
 package com.example.spontaneity;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import static java.lang.Math.max;
+
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -9,10 +16,21 @@ import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
+import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +42,8 @@ import android.view.ViewGroup;
 
 import com.example.spontaneity.databinding.ActivityMainBinding;
 import com.example.spontaneity.databinding.SignupBinding;
+
+import java.util.concurrent.TimeUnit;
 
 // PRIMARY ENTRY POINT
 // only one activity in this project
@@ -42,6 +62,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // request notification permissions
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+            // old notification permission code
+//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+//                return;
+//            });
+        }
+
+        // create notifications channel
+        NotificationChannel channel = new NotificationChannel("reminderNotifications", "SpontaneityChannel", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setVibrationPattern(new long[] {0, 500});
+        channel.enableVibration(true);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        // TODO DELETE THIS
+//        // activate notifications: create channel and manager
+
+//
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+//        // intent
+//        Intent intent = new Intent(enclosingContext, ReminderBroadcast.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(enclosingContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+//
+//        // timing
+//        long currTimeInMilli = System.currentTimeMillis();
+//        long tenSecInMilli = 10 * 1000;
+//
+//        // set
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, currTimeInMilli+tenSecInMilli, pendingIntent);
     }
 
     @Override
@@ -100,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     false
             );
             // read user.txt
-            FileManager fileManager = new FileManager(getApplicationContext(), this, "user.txt");
+            FileManager fileManager = new FileManager(getApplicationContext(), "user.txt");
             String[] readFile = fileManager.readFile();
             // copy its contents to the binding fields
             dialogBinding.nameFieldSignup.setText(readFile[0]);
