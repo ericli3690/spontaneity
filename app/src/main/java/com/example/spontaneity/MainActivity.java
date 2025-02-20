@@ -68,10 +68,6 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= 33) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
             }
-            // old notification permission code
-//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-//                return;
-//            });
         }
 
         // create notifications channel
@@ -80,23 +76,6 @@ public class MainActivity extends AppCompatActivity {
         channel.enableVibration(true);
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-
-        // TODO DELETE THIS
-//        // activate notifications: create channel and manager
-
-//
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-//        // intent
-//        Intent intent = new Intent(enclosingContext, ReminderBroadcast.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(enclosingContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-//
-//        // timing
-//        long currTimeInMilli = System.currentTimeMillis();
-//        long tenSecInMilli = 10 * 1000;
-//
-//        // set
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, currTimeInMilli+tenSecInMilli, pendingIntent);
     }
 
     @Override

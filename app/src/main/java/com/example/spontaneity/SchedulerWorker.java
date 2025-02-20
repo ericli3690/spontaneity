@@ -37,19 +37,6 @@ public class SchedulerWorker extends Worker {
 
         super(context, workerParams);
         this.enclosingContext = context;
-
-        // TODO THE BELOW IS PROBABLY NOT NEEDED
-//        // make a new notification channel to send to
-//        NotificationChannel notificationChannel = new NotificationChannel(
-//                CHANNEL_ID,
-//                "Reminders",
-//                NotificationManager.IMPORTANCE_HIGH
-//        );
-//        // make a manager for the channel
-//        this.notificationManager = getSystemService(enclosingContext, NotificationManager.class);
-//        // lock in the channel
-//        // does nothing if the channel with id CHANNEL_ID has already been created
-//        this.notificationManager.createNotificationChannel(notificationChannel);
     }
 
     private int randomTime() {
@@ -95,6 +82,7 @@ public class SchedulerWorker extends Worker {
             Reminder lotteryWinner = reminderLottery.get(lotteryWinnerIndex);
             Globals.nextTitle = lotteryWinner.getName();
             Globals.nextDesc = lotteryWinner.getType() + ": " + lotteryWinner.getDescription();
+            Globals.nextColor = lotteryWinner.getColor();
 
             int randomTime = randomTime();
 

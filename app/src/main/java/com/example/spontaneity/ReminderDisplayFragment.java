@@ -74,10 +74,6 @@ public class ReminderDisplayFragment extends Fragment {
             "Be bold!"
     };
 
-    // TODO OLD BROKEN NOTIFICATION SCHEDULER
-//    // notifications
-//    NotificationScheduler notifScheduler;
-
     // no predictive animations, stops recyclerview from crashing when a lot of items are simultaneously removed
     private static class NPALinearLayoutManager extends LinearLayoutManager {
         @Override
@@ -98,7 +94,6 @@ public class ReminderDisplayFragment extends Fragment {
         View root = binding.getRoot();
         RecyclerView list = binding.list;
         list.setLayoutManager(new NPALinearLayoutManager(root.getContext())); // use NPA
-        // notifScheduler = new NotificationScheduler(getContext(), getActivity()); TODO OLD BROKEN NOTIFICATION SCHEDULER
 
         FileManager fileManager = new FileManager(getContext(), "reminders.txt");
 
@@ -106,30 +101,6 @@ public class ReminderDisplayFragment extends Fragment {
         list.setAdapter(adapter);
         return root;
     }
-
-    // TODO ARCHIVE THIS
-//    private void scheduleMotivationalMessage() {
-//        // schedule toast action
-//        executorService.scheduleWithFixedDelay(new Runnable() {
-//            @Override
-//            public void run() { // which is...
-//                handler.post(new Runnable() { // post a new runnable to the ui thread
-//                    @Override
-//                    public void run() { // which is...
-//                        try { // try to post a motivational toast
-//                            Toast.makeText(
-//                                    getContext(),
-//                                    motivationalMessages[new Random().nextInt(motivationalMessages.length)],
-//                                    Toast.LENGTH_SHORT
-//                            ).show();
-//                        } catch (NullPointerException e) { // but if it fails just do nothing
-//                            Log.d("ctx thread removal", "Old Context Thread Removed");
-//                        }
-//                    }
-//                });
-//            }
-//        }, 60,60, TimeUnit.SECONDS); // runs every a secs after an initial b sec delay
-//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -159,29 +130,6 @@ public class ReminderDisplayFragment extends Fragment {
                 return false;
             }
         });
-
-        // TODO DELETE THIS
-        // activate random motivational messages
-//        scheduleMotivationalMessage();
-
-        // TODO OLD BROKEN NOTIFICATION CODE
-//        // activate notifications
-//        if (!Globals.notificationsStarted) {
-//            Globals.notificationsStarted = true; // prevent more than one notifmanager from running
-////            Log.d("stage 1", "1");
-////            WorkRequest workRequest = new PeriodicWorkRequest.Builder(
-////                    NotificationWorker.class,
-////                    16, // x minutes minimum
-////                    TimeUnit.MINUTES,
-////                    6, // then within the next y minutes
-////                    TimeUnit.MINUTES
-////            ).build();
-//            FileManager fileManager = new FileManager(getContext(), getActivity(), "user.txt");
-//            String[] readFile = fileManager.readFile();
-//            int frequencyInSeconds = Integer.parseInt(readFile[3]);
-//            // unimplemented: make randomness user customized rather than just a fifth of the freq
-//            notifScheduler.scheduleNotif(frequencyInSeconds, frequencyInSeconds/5, adapter.reminders);
-//        }
 
         // check stress button
         binding.checkStressButton.setOnClickListener(new View.OnClickListener() {

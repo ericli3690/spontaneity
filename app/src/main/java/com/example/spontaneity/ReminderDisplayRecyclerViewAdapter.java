@@ -194,7 +194,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         holder.urgencyView.setTextColor(
             ContextCompat.getColor( // need to use a color id, then need to pass in context
                 enclosingContext,
-                getUrgencyColor(urgency) // get color id using method below
+                Globals.getUrgencyColor(urgency) // get color id using method below
             )
         );
 
@@ -203,7 +203,7 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
         holder.nameView.setTextColor(
             ContextCompat.getColor(
                 enclosingContext,
-                getTextColor(color)
+                Globals.getTextColor(color)
             )
         );
 
@@ -232,51 +232,6 @@ public class ReminderDisplayRecyclerViewAdapter extends RecyclerView.Adapter<Rem
             this.urgencyView = binding.elementUrgencyField;
             this.typeView = binding.elementTypeField;
             this.switchView = binding.elementSwitch;
-        }
-    }
-
-    // switch for urgency color
-    public int getUrgencyColor(int urgency) {
-        switch (urgency) {
-            case 5:
-                return R.color.red;
-            case 4:
-                return R.color.orange;
-            case 3:
-                return R.color.yellow_2;
-            case 2:
-                return R.color.teal_200;
-            case 1:
-                return R.color.teal_700;
-            default: // in case of failure
-                return R.color.black;
-        }
-    }
-
-    // switch for reminder color
-    public int getTextColor(String colorName) {
-        switch (colorName) {
-            case "Red":
-                return R.color.red;
-            case "Orange":
-                return R.color.orange;
-            case "Yellow":
-                return R.color.yellow;
-            case "Light Green":
-                return R.color.light_green;
-            case "Dark Green":
-                return R.color.dark_green;
-            case "Light Blue":
-                return R.color.light_blue;
-            case "Dark Blue":
-                return R.color.dark_blue;
-            case "Purple":
-                return R.color.purple_500;
-            case "Pink":
-                return R.color.pink;
-            case "None":
-            default: // in case of failure, grey
-                return R.color.grey;
         }
     }
 }
