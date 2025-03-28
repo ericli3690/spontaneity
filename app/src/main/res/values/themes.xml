@@ -18,4 +18,9 @@
     <style name="Theme.Spontaneity.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Spontaneity.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Spontaneity.ToolbarEmboss" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@color/purple_200</item>
+    </style>
+
 </resources>

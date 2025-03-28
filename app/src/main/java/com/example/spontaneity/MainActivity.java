@@ -70,12 +70,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // create notifications channel
-        NotificationChannel channel = new NotificationChannel("reminderNotifications", "SpontaneityChannel", NotificationManager.IMPORTANCE_DEFAULT);
+        // create notification channels
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
+        NotificationChannel channel = new NotificationChannel("reminderNotifications", "SpontaneityChannel", NotificationManager.IMPORTANCE_HIGH);
         channel.setVibrationPattern(new long[] {0, 500});
         channel.enableVibration(true);
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
+
+        NotificationChannel channelUrgent = new NotificationChannel("reminderNotificationsUrgent", "SpontaneityChannelUrgent", NotificationManager.IMPORTANCE_HIGH);
+        channelUrgent.setVibrationPattern(new long[] {0, 500, 0, 500});
+        channelUrgent.enableVibration(true);
+        notificationManager.createNotificationChannel(channelUrgent);
     }
 
     @Override

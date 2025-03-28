@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/loginVersion"
-    android:background="@color/white"
+    android:background="@color/design_default_color_background"
     android:layout_margin="10dp">
 
     <TextView

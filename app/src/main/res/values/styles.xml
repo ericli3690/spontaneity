@@ -4,6 +4,7 @@
     <style name="SwitchStyle1" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/teal_700</item>
         <item name="colorSwitchThumbNormal">@color/red</item>
+        <item name="android:colorForeground">@color/grey</item>
     </style>
 
     <style name="DialogBoxStyle" parent="Theme.Spontaneity">

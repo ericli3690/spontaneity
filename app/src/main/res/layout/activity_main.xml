@@ -15,7 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@color/yellow_2"
+            style="@style/Theme.Spontaneity.ToolbarEmboss"
             app:popupTheme="@style/Theme.Spontaneity.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

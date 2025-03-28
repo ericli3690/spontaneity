@@ -42,7 +42,7 @@ Reminder: the data associated with the ViewHolders
 ✅ TASK 3: ONBOARDING AND SETTINGS
     ✅ use editTexts
     ✅ use addNewUser method
-    ✅ should recieve
+    ✅ should receive
     ✅ - username
     ✅ - password
     ✅ - full name (then split)
@@ -59,13 +59,15 @@ Reminder: the data associated with the ViewHolders
     ✅ bug test
 
 TASK 5: MORE POLISHING
-    fix the notification bug
-    background running
-    launch on start
-    notification vibration and sounds and color; notification onclick
-    make toasts run every minute, always
+    ✅ fix the notification bug
+    ✅ background running
+    ✅ launch on start
+    ✅ notification vibration and sounds and color
+    ✅ notification onclick
+    ✅ remove weird grid in background of app icon
     do not disturb times / when you want to receive notifications, earliest and latest times for reminders
     clean up settings; are preferences automatically applied when they are changed?
+    add explanation of app to onboarding fragment (should also show up in settings)
     ensure dark mode works
     put on app store
 

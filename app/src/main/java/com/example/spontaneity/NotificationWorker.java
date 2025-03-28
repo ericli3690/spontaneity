@@ -1,6 +1,8 @@
 package com.example.spontaneity;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -25,16 +27,35 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        String nextTitle = "Click Me!";
+        String nextDesc = "It's time to check in on your habits.";
+        String nextColor = "None";
+
+        FileManager queueFileManager = new FileManager(enclosingContext, "queue.txt");
+        String[] readFile = queueFileManager.readFile();
+        if (queueFileManager.wasCreated() && readFile.length == 3) {
+            nextTitle = readFile[0];
+            nextDesc = readFile[1];
+            nextColor = readFile[2];
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(enclosingContext, "reminderNotifications")
                 .setSmallIcon(R.drawable.ic_baseline_star_24)
-                .setColor(ContextCompat.getColor(enclosingContext, Globals.getTextColor(Globals.nextColor)))
-                .setContentTitle(Globals.nextTitle)
-                .setContentText(Globals.nextDesc)
+                .setColor(ContextCompat.getColor(enclosingContext, Globals.getTextColor(nextColor)))
+                .setContentTitle(nextTitle)
+                .setContentText(nextDesc)
                 .setVibrate(new long[] {0, 500})
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Intent intent = new Intent(enclosingContext, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pending = PendingIntent.getActivity(enclosingContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pending);
+        builder.setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(enclosingContext);
-        FileManager fileManager = new FileManager(enclosingContext, "id.txt");
-        int nextId = fileManager.getNextId();
+
+        FileManager idFileManager = new FileManager(enclosingContext, "id.txt");
+        int nextId = idFileManager.getNextId();
         notificationManager.notify(nextId, builder.build());
         Log.d("NotificationWorker", "Sent notification! Used ID: " + nextId);
         return Result.success();
